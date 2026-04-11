@@ -77,7 +77,7 @@ export default function Reviews() {
                   ))}
                 </div>
                 <p className="font-body text-on-surface-variant leading-relaxed mb-6 italic">
-                  "{review.text}"
+                  &quot;{review.text}&quot;
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
