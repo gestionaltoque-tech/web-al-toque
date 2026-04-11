@@ -1,6 +1,6 @@
-import { Clock, MapPin, Dog } from "lucide-react";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { Clock, Dog, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export default function InfoSection() {
   const container = {
@@ -17,7 +17,7 @@ export default function InfoSection() {
   };
 
   return (
-    <section className="bg-primary pt-24 pb-32">
+    <section className="bg-surface-container-highest pt-24 pb-32">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div 
           className="grid md:grid-cols-3 gap-8"
@@ -28,7 +28,7 @@ export default function InfoSection() {
         >
           {/* Horarios */}
           <motion.div variants={item} className="bg-surface-container-lowest p-10 rounded-4xl flex flex-col items-center text-center shadow-organic">
-            <div className="w-16 h-16 bg-primary-fixed flex items-center justify-center rounded-2xl mb-6 text-on-primary-fixed">
+            <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-2xl mb-6 text-primary">
               <Clock size={32} strokeWidth={1.5} />
             </div>
             <h3 className="font-display text-xl text-on-surface font-semibold mb-3">Horario</h3>
@@ -41,13 +41,13 @@ export default function InfoSection() {
 
           {/* Ubicación */}
           <motion.div variants={item} className="bg-surface-container-lowest p-10 rounded-4xl flex flex-col items-center text-center shadow-organic">
-            <div className="w-16 h-16 bg-primary-fixed flex items-center justify-center rounded-2xl mb-6 text-on-primary-fixed">
+            <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-2xl mb-6 text-primary">
               <MapPin size={32} strokeWidth={1.5} />
             </div>
             <h3 className="font-display text-xl text-on-surface font-semibold mb-3">Ubicación</h3>
             <p className="text-on-surface-variant font-body mb-4">
               Rua Real 69,<br />
-              Ferrol, Spain 15402
+              Ferrol, A Coruña, 15402
             </p>
             <Link 
               href="https://maps.google.com/?q=Rua+Real+69,Ferrol,Spain+15402" 
@@ -61,7 +61,7 @@ export default function InfoSection() {
 
           {/* Pet Friendly */}
           <motion.div variants={item} className="bg-surface-container-lowest p-10 rounded-4xl flex flex-col items-center text-center shadow-organic transform md:-translate-y-4">
-            <div className="w-16 h-16 bg-secondary-container flex items-center justify-center rounded-2xl mb-6 text-on-secondary-container">
+            <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-2xl mb-6 text-primary">
               <Dog size={32} strokeWidth={1.5} />
             </div>
             <h3 className="font-display text-xl text-on-surface font-semibold mb-3">Pet Friendly</h3>

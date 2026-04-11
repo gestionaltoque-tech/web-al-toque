@@ -43,13 +43,13 @@ function getRelativeTime(dateString: string) {
 
 export default function Reviews() {
   return (
-    <section className="py-24 bg-surface-container-lowest overflow-hidden">
+    <section className="py-24 bg-surface-dark overflow-hidden transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="font-display text-4xl md:text-5xl font-semibold text-on-surface mb-4">
+          <h2 className="font-display text-4xl md:text-5xl font-semibold text-on-surface-dark mb-4">
             Lo que dicen de nosotros
           </h2>
-          <p className="font-body text-lg text-secondary">
+          <p className="font-body text-lg text-on-surface-dark/70">
             Nuestros clientes nos avalan en Google.
           </p>
         </div>
@@ -67,26 +67,26 @@ export default function Reviews() {
                 href={review.link} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block h-full bg-surface p-8 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-organic hover:-translate-y-1 transition-all duration-300"
+                className="block h-full bg-white/5 backdrop-blur-sm p-8 rounded-3xl shadow-sm border border-white/10 hover:border-primary/50 hover:shadow-organic hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F59E0B" className="w-5 h-5">
+                    <svg key={i} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 fill-primary">
                       <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
                     </svg>
                   ))}
                 </div>
-                <p className="font-body text-on-surface-variant leading-relaxed mb-6 italic">
+                <p className="font-body text-on-surface-dark/90 leading-relaxed mb-6 italic">
                   &quot;{review.text}&quot;
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-display font-bold text-primary">
+                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white">
                       {review.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="font-body font-semibold text-on-surface leading-tight">{review.name}</h4>
-                      <span className="text-xs text-on-surface-variant/70">{getRelativeTime(review.originalDate)}</span>
+                      <h4 className="font-body font-semibold text-on-surface-dark leading-tight">{review.name}</h4>
+                      <span className="text-xs text-on-surface-dark/50">{getRelativeTime(review.originalDate)}</span>
                     </div>
                   </div>
                   {/* Google "G" icon mini */}

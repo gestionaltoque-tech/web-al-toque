@@ -18,13 +18,13 @@ export default function ActionButtons() {
               href="https://wa.me/34602400773" 
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col items-center justify-center p-8 bg-surface-container-lowest shadow-sm hover:shadow-organic rounded-4xl transition-shadow"
+              className="flex flex-col items-center justify-center p-8 bg-surface-container shadow-sm hover:shadow-organic rounded-4xl border border-transparent hover:border-primary/30 transition-all duration-300 group"
             >
-              <div className="w-16 h-16 rounded-full bg-[#E8F5E9] text-[#2E7D32] flex items-center justify-center mb-4">
+              <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <MessageCircle size={32} strokeWidth={1.5} />
               </div>
               <span className="font-body font-semibold text-on-surface">
-                Contacta por WhatsApp
+                WhatsApp
               </span>
             </Link>
           </motion.div>
@@ -34,9 +34,9 @@ export default function ActionButtons() {
               href="https://maps.google.com/?q=Rua+Real+69,Ferrol,Spain+15402" 
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col items-center justify-center p-8 bg-surface-container-lowest shadow-sm hover:shadow-organic rounded-4xl transition-shadow"
+              className="flex flex-col items-center justify-center p-8 bg-surface-container shadow-sm hover:shadow-organic rounded-4xl border border-transparent hover:border-primary/30 transition-all duration-300 group"
             >
-              <div className="w-16 h-16 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center mb-4">
+              <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <MapPin size={32} strokeWidth={1.5} />
               </div>
               <span className="font-body font-semibold text-on-surface">
@@ -48,9 +48,9 @@ export default function ActionButtons() {
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Link 
               href="tel:+34602400773" 
-              className="flex flex-col items-center justify-center p-8 bg-surface-container-lowest shadow-sm hover:shadow-organic rounded-4xl transition-shadow"
+              className="flex flex-col items-center justify-center p-8 bg-surface-container shadow-sm hover:shadow-organic rounded-4xl border border-transparent hover:border-primary/30 transition-all duration-300 group"
             >
-              <div className="w-16 h-16 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
+              <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <Phone size={32} strokeWidth={1.5} />
               </div>
               <span className="font-body font-semibold text-on-surface">

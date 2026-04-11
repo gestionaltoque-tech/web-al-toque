@@ -1,5 +1,31 @@
 import type { Config } from "tailwindcss";
 
+/** 
+ *  TEMAS DE MARCA - CAMBIO RÁPIDO
+ *  Para cambiar el color de toda la web, simplemente cambia la constante 'activeTheme' 
+ *  por el tema que prefieras (RED o GREEN).
+ */
+
+const RED_THEME = {
+  primary: "#C41E3A",
+  primaryContainer: "#9B1B30",
+  secondary: "#1A1A1A",
+  surfaceDark: "#121212",
+  onSurfaceDark: "#fbfbe2",
+};
+
+const GREEN_THEME = {
+  primary: "#3A5A3A",
+  primaryContainer: "#5C765C",
+  secondary: "#824c28",
+  surfaceDark: "#dbdcc3",
+  onSurfaceDark: "#1b1d0e",
+};
+
+// --- ELIGE EL TEMA AQUÍ ---
+const activeTheme = RED_THEME; 
+// --------------------------
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -11,21 +37,22 @@ const config: Config = {
       colors: {
         background: "#fbfbe2",
         primary: {
-          DEFAULT: "#3A5A3A", // Stronger sage green
-          container: "#5C765C",
-          fixed: "#d6e7d4",
-          "fixed-dim": "#bacbb8",
+          DEFAULT: activeTheme.primary,
+          container: activeTheme.primaryContainer,
+          fixed: "#FFE4E6",
+          "fixed-dim": "#FECDD3",
         },
         secondary: {
-          DEFAULT: "#824c28", // Stronger earthy brown
-          container: "#ffc8a6",
-          fixed: "#ffdcc6",
-          "fixed-dim": "#eabda0",
+          DEFAULT: activeTheme.secondary,
+          container: "#333333",
+          fixed: "#4A4A4A",
+          "fixed-dim": "#2D2D2D",
         },
         surface: {
           DEFAULT: "#fbfbe2",
           dim: "#dbdcc3",
           bright: "#fbfbe2",
+          dark: activeTheme.surfaceDark,
           "container-lowest": "#ffffff",
           "container-low": "#f5f5dc",
           container: "#efefd7",
@@ -36,9 +63,10 @@ const config: Config = {
         on: {
           primary: "#ffffff",
           secondary: "#ffffff",
-          "secondary-container": "#7a5840",
+          "secondary-container": "#fbfbe2",
           surface: "#1b1d0e",
           "surface-variant": "#434842",
+          "surface-dark": activeTheme.onSurfaceDark,
         },
         outline: {
           DEFAULT: "#747872",
