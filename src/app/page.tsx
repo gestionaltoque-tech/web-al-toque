@@ -1,3 +1,5 @@
+export const revalidate = 86400;
+
 import ActionButtons from "@/components/ActionButtons";
 import Footer from "@/components/Footer";
 import Gallery from "@/components/Gallery";
