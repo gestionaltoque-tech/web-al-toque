@@ -15,6 +15,26 @@ export interface MenuItem {
   image?: string;
 }
 
+interface ContentfulAsset {
+  sys: {
+    id: string;
+  };
+  fields: {
+    file: {
+      url: string;
+      details?: {
+        size: number;
+        image?: {
+          width: number;
+          height: number;
+        };
+      };
+      fileName?: string;
+      contentType?: string;
+    };
+  };
+}
+
 /**
  * Obtiene los datos del Hero de la sección Landing
  */
@@ -31,7 +51,7 @@ export const getHeroData = async () => {
       tituloPrincipalParte2: fields.tituloPrincipalParte2 as string,
       palabrasRotativasTitulo: fields.palabrasRotativasTitulo as string[],
       subtituloPrincipal: fields.subtituloPrincipal as string,
-      galleryImagenesPrincipal: fields.galleryImagenesPrincipal as any[], 
+      galleryImagenesPrincipal: fields.galleryImagenesPrincipal as ContentfulAsset[], 
     };
   } catch (error) {
     console.error("Error al obtener datos de Contentful:", error);

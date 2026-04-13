@@ -5,13 +5,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+interface ContentfulAsset {
+  fields: {
+    file: {
+      url: string;
+    };
+  };
+}
+
 interface HeroProps {
   data?: {
     tituloPrincipal?: string;
     tituloPrincipalParte2?: string;
     palabrasRotativasTitulo?: string[];
     subtituloPrincipal?: string;
-    galleryImagenesPrincipal?: any[];
+    galleryImagenesPrincipal?: ContentfulAsset[];
   };
 }
 
