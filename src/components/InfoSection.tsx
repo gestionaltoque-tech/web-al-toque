@@ -1,8 +1,23 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { Clock, Dog, MapPin } from "lucide-react";
 import Link from "next/link";
 
-export default function InfoSection() {
+interface InfoSectionProps {
+  data?: {
+    tituloHorario?: string;
+    textoHorario: string;
+    tituloUbicacion?: string;
+    textoUbicacion: string;
+    enlaceGoogleMaps: string;
+    textoVerEnGoogle: string;
+    tituloMascotas?: string;
+    textoMascotas: string;
+  };
+}
+
+export default function InfoSection({ data }: InfoSectionProps) {
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -31,11 +46,11 @@ export default function InfoSection() {
             <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-2xl mb-6 text-primary">
               <Clock size={32} strokeWidth={1.5} />
             </div>
-            <h3 className="font-display text-xl text-on-surface font-semibold mb-3">Horario</h3>
-            <p className="text-on-surface-variant font-body">
-              Lunes - Jueves: 7:30 - 22:30<br />
-              Viernes - Sábados: 8:00 - 23:00<br />
-              Domingos: 8:00 - 22:00
+            <h3 className="font-display text-xl text-on-surface font-semibold mb-3">
+              {data?.tituloHorario || "Horario"}
+            </h3>
+            <p className="text-on-surface-variant font-body whitespace-pre-wrap">
+              {data?.textoHorario || "Lunes - Jueves: 7:30 - 22:30\nViernes - Sábados: 8:00 - 23:00\nDomingos: 8:00 - 22:00"}
             </p>
           </motion.div>
 
@@ -44,18 +59,19 @@ export default function InfoSection() {
             <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-2xl mb-6 text-primary">
               <MapPin size={32} strokeWidth={1.5} />
             </div>
-            <h3 className="font-display text-xl text-on-surface font-semibold mb-3">Ubicación</h3>
-            <p className="text-on-surface-variant font-body mb-4">
-              Rua Real 69,<br />
-              Ferrol, A Coruña, 15402
+            <h3 className="font-display text-xl text-on-surface font-semibold mb-3">
+              {data?.tituloUbicacion || "Ubicación"}
+            </h3>
+            <p className="text-on-surface-variant font-body mb-4 whitespace-pre-wrap">
+              {data?.textoUbicacion || "Rua Real 69,\nFerrol, A Coruña, 15402"}
             </p>
             <Link 
-              href="https://maps.google.com/?q=Rua+Real+69,Ferrol,Spain+15402" 
+              href={data?.enlaceGoogleMaps || "https://maps.google.com/?q=Rua+Real+69,Ferrol,Spain+15402"} 
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary font-medium hover:text-primary-container underline decoration-2 underline-offset-4 transition-colors"
             >
-              Ver en Google Maps
+              {data?.textoVerEnGoogle || "Ver en Google Maps"}
             </Link>
           </motion.div>
 
@@ -64,9 +80,11 @@ export default function InfoSection() {
             <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-2xl mb-6 text-primary">
               <Dog size={32} strokeWidth={1.5} />
             </div>
-            <h3 className="font-display text-xl text-on-surface font-semibold mb-3">Pet Friendly</h3>
-            <p className="text-on-surface-variant font-body">
-              Tu mejor amigo es bienvenido. Tenemos agua fresca y premios esperándolo.
+            <h3 className="font-display text-xl text-on-surface font-semibold mb-3">
+              {data?.tituloMascotas || "Pet Friendly"}
+            </h3>
+            <p className="text-on-surface-variant font-body whitespace-pre-wrap">
+              {data?.textoMascotas || "Tu mejor amigo es bienvenido. Tenemos agua fresca y premios esperándolo."}
             </p>
           </motion.div>
         </motion.div>
@@ -74,3 +92,4 @@ export default function InfoSection() {
     </section>
   );
 }
+

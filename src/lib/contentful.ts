@@ -1,20 +1,10 @@
-/**
- * Servicio para integración futura con Contentful CMS
- * 
- * Este archivo está preparado para conectar el menú de "Al Toque"
- * con un headless CMS (Contentful).
- * 
- * Requiere instalar: npm install contentful
- */
+import { createClient } from 'contentful';
 
-// import { createClient } from 'contentful';
-
-/*
+// 1. Configuramos el cliente con las variables de entorno
 export const contentfulClient = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID || '',
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '',
+  space: process.env.CONTENTFUL_SPACE_ID!,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
 });
-*/
 
 export interface MenuItem {
   id: string;
@@ -26,53 +16,51 @@ export interface MenuItem {
 }
 
 /**
- * Función mock para obtener el menú. 
- * En el futuro, reemplázala con la llamada real a contentfulClient.getEntries()
+ * Obtiene los datos del Hero de la sección Landing
  */
-export const getMenuEntries = async (): Promise<MenuItem[]> => {
-  // Simulación de datos para la Landing Page
-  return [
-    {
-      id: "1",
-      title: "Café de Especialidad",
-      description: "Espresso doble con nuestro blend de origen Colombia.",
-      price: "2.50€",
-      category: "Cafés"
-    },
-    {
-      id: "2",
-      title: "Flat White",
-      description: "Doble shot de espresso con leche texturizada.",
-      price: "3.00€",
-      category: "Cafés"
-    },
-    {
-      id: "3",
-      title: "Croissant Artesano",
-      description: "Receta francesa tradicional, crujiente por fuera y mantequilla por dentro.",
-      price: "1.80€",
-      category: "Bollería"
-    },
-    {
-      id: "4",
-      title: "Roll de Canela",
-      description: "Recién horneado, glaseado suave y masa esponjosa.",
-      price: "2.50€",
-      category: "Bollería"
-    },
-    {
-      id: "5",
-      title: "Tostada Aguacate",
-      description: "Pan de masa madre, aguacate triturado, AOVE y semillas.",
-      price: "5.50€",
-      category: "Desayunos"
-    },
-    {
-      id: "6",
-      title: "Bowl Acai",
-      description: "Acai orgánico, granola casera, plátano y frutos rojos frescos.",
-      price: "6.50€",
-      category: "Desayunos"
-    }
-  ];
+export const getHeroData = async () => {
+  try {
+    const response = await contentfulClient.getEntries({
+      content_type: 'landing', 
+      limit: 1,
+    });
+    const fields = response.items[0]?.fields;
+    if (!fields) return undefined;
+    return {
+      tituloPrincipal: fields.tituloPrincipal as string,
+      tituloPrincipalParte2: fields.tituloPrincipalParte2 as string,
+      palabrasRotativasTitulo: fields.palabrasRotativasTitulo as string[],
+      subtituloPrincipal: fields.subtituloPrincipal as string,
+      galleryImagenesPrincipal: fields.galleryImagenesPrincipal as any[], 
+    };
+  } catch (error) {
+    console.error("Error al obtener datos de Contentful:", error);
+    return undefined;
+  }
+};
+
+export const getInfoSectionData = async () => {
+  try {
+    const response = await contentfulClient.getEntries({
+      content_type: 'infoSection', 
+      limit: 1,
+    });
+
+    const fields = response.items[0]?.fields;
+    if (!fields) return undefined;
+
+    return {
+      tituloHorario: fields.tituloHorario as string,
+      textoHorario: fields.textoHorario as string,
+      tituloUbicacion: fields.tituloUbicacion as string,
+      textoUbicacion: fields.textoUbicacion as string,
+      enlaceGoogleMaps: fields.enlaceGoogleMaps as string,
+      textoVerEnGoogle: fields.textoVerEnGoogle as string,
+      tituloMascotas: fields.tituloMascotas as string,
+      textoMascotas: fields.textoMascotas as string,
+    };
+  } catch (error) {
+    console.error("Error al obtener InfoSection:", error);
+    return undefined;
+  }
 };

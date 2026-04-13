@@ -1,3 +1,5 @@
+"use client";
+
 import { Phone, MapPin, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";

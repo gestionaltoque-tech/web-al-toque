@@ -5,17 +5,52 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const words = ["rápida", "pet-friendly", "acogedora"];
+interface HeroProps {
+  data?: {
+    tituloPrincipal?: string;
+    tituloPrincipalParte2?: string;
+    palabrasRotativasTitulo?: string[];
+    subtituloPrincipal?: string;
+    galleryImagenesPrincipal?: any[];
+  };
+}
 
-export default function Hero() {
+const defaultWords = ["rápida", "pet-friendly", "acogedora"];
+
+export default function Hero({ data }: HeroProps) {
   const [index, setIndex] = useState(0);
 
+  // Mapeo selectivo con fallbacks
+  const tituloParte1 = data?.tituloPrincipal || "Tu parada ";
+  const tituloParte2 = data?.tituloPrincipalParte2 || "y sabrosa en Ferrol.";
+  const palabras = data?.palabrasRotativasTitulo && data.palabrasRotativasTitulo.length > 0 
+    ? data.palabrasRotativasTitulo 
+    : defaultWords;
+  const subtitulo = data?.subtituloPrincipal || "Disfruta del mejor café de especialidad y bollería artesanal en un ambiente relajado y acogedor. ¡Tus mascotas son bievenidas!";
+  const imagenes = data?.galleryImagenesPrincipal || [];
+
   useEffect(() => {
+    if (palabras.length <= 1) return;
+
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % words.length);
+      setIndex((prev) => (prev + 1) % palabras.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [palabras.length]);
+
+  // Lógica de imagen: Contentful (si existe) o fallback local
+  const getHeroImage = (idx: number) => {
+    // Intentamos sacar la imagen de la galería de Contentful
+    // Usamos el operador % para que si hay 3 palabras pero solo 1 foto, repita la foto
+    const imagenActual = imagenes.length > 0 ? imagenes[idx % imagenes.length] : null;
+    const contentfulImg = imagenActual?.fields?.file?.url;
+
+    if (contentfulImg) {
+      return contentfulImg.startsWith("//") ? `https:${contentfulImg}` : contentfulImg;
+    }
+    // Fallback local basado en la lógica original
+    return idx === 1 ? "/images/pet.png" : "/images/unnamed (1).jpg";
+  };
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-surface">
@@ -30,26 +65,26 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <h1 className="font-display text-5xl md:text-7xl font-semibold leading-tight text-on-surface -tracking-[0.02em] mb-6">
-            Tu parada <br className="md:hidden" />
+            {tituloParte1} <br className="md:hidden" />
             <span className="text-primary italic inline-flex items-center min-w-[280px]">
               <AnimatePresence mode="wait">
                 <motion.span
-                  key={words[index]}
+                  key={palabras[index]}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -15 }}
                   transition={{ duration: 0.3 }}
                   className="inline-block"
                 >
-                  {words[index]}
+                  {palabras[index]}
                 </motion.span>
               </AnimatePresence>
             </span>
             <br />
-            y sabrosa en Ferrol.
+            {tituloParte2}
           </h1>
           <p className="font-body text-lg text-on-surface-variant mb-10 w-4/5 leading-relaxed">
-            Disfruta del mejor café de especialidad y bollería artesanal en un ambiente relajado y acogedor. ¡Tus mascotas son bievenidas!
+            {subtitulo}
           </p>
           <div className="flex flex-wrap gap-4">
             <Link 
@@ -67,31 +102,6 @@ export default function Hero() {
               Nuestro Menú
             </Link>
           </div>
-
-          {/* Social Proof: Reseñas de Google */}
-  {/*         <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="mt-10"
-          >
-            <Link 
-              href="https://www.google.com/search?sca_esv=8e2fe23374549be9&rlz=1C1UEAD_esES1041ES1041&sxsrf=ANbL-n6-pLjW4sTvVSd8WKwTuEMdxQQjGw:1775869421226&uds=ALYpb_ncDc7jTlmw6Mmq7NjuX5c-4UORMzVpzwoDZld-YtjVKhgytvAvGW3CYM4H0tp6-7SJ2mg6PFKwRXT449Ntb12N5c3jNIA9IBAEC0imwRNd9R6fSX2akK4K28JDA_pTE-LdqfxoULDCt0s2uBggHcZW1ytHXg&q=Caf%C3%A9+Al+Toque+Rese%C3%B1as&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOd4MMqnK4jcbZZWQoELXD3MzMr2cVg8faIbFLUGcYprGcioYRR2RbO0omtC4ZYOCKoOsyGhwYz7oxgSvtqNHYzQOHUTT&hl=es-ES&sa=X&ved=2ahUKEwiP6JOQzeSTAxXZ4QIHHZgxGpsQ_4MLegQIURAO&biw=1920&bih=911&dpr=1"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block group"
-              title="Lee nuestras reseñas en Google"
-            >
-              <div className="relative h-16 w-56 sm:w-64 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105">
-                <Image 
-                  src="/images/media_google_reseña.png" 
-                  alt="Nuestra puntuación en Google Reseñas" 
-                  fill 
-                  className="object-contain object-left drop-shadow-md"
-                />
-              </div>
-            </Link>
-          </motion.div> */}
         </motion.div>
 
         <motion.div 
@@ -100,7 +110,7 @@ export default function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 1.05 }}
@@ -110,7 +120,7 @@ export default function Hero() {
               className="absolute inset-0"
             >
               <Image
-                src={index === 1 ? "/images/pet.png" : "/images/unnamed (1).jpg"}
+                src={getHeroImage(index)}
                 alt="Café de especialidad en Al Toque"
                 fill
                 className={`object-cover ${index === 1 ? 'object-center' : 'object-bottom'}`}
