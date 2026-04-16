@@ -19,8 +19,8 @@ export default async function Home() {
     getInstagramData()
   ]);
   
-  console.log(menuData,"MENU DATA");
-  console.log(galleryData,"galleryData");
+  /* console.log(menuData,"MENU DATA");
+  console.log(galleryData,"galleryData"); */
   
   return (
     <main className="min-h-screen bg-surface">

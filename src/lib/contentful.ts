@@ -20,6 +20,7 @@ interface ContentfulAsset {
     id: string;
   };
   fields: {
+    title?: string;
     file: {
       url: string;
       details?: {
@@ -56,8 +57,9 @@ export const getHeroData = async () => {
       content_type: 'landing', 
       limit: 1,
     });
-    const fields = response.items[0]?.fields;
-    if (!fields) return undefined;
+    if (response.items.length === 0) return undefined;
+    const fields = response.items[0].fields as Record<string, unknown>;
+    
     return {
       tituloPrincipal: fields.tituloPrincipal as string,
       tituloPrincipalParte2: fields.tituloPrincipalParte2 as string,
@@ -78,8 +80,8 @@ export const getInfoSectionData = async () => {
       limit: 1,
     });
 
-    const fields = response.items[0]?.fields;
-    if (!fields) return undefined;
+    if (response.items.length === 0) return undefined;
+    const fields = response.items[0].fields as Record<string, unknown>;
 
     return {
       tituloHorario: fields.tituloHorario as string,
@@ -102,22 +104,28 @@ export const getMenuData = async (): Promise<MenuCategory[]> => {
     const response = await contentfulClient.getEntries({
       content_type: 'categoriaDeCarta', 
       include: 2, 
-      order: ['sys.createdAt'] as any, 
+      order: ['sys.createdAt'], 
     });
 
-    return response.items.map((cat) => ({
-      category: cat.fields.titulo as string,
-      tituloSeccion: cat.fields.tituloSeccion as string,
-      subtituloSeccion: cat.fields.subtituloSeccion as string,
-      image: (cat.fields.imagen as any)?.fields?.file?.url 
-        ? `https:${(cat.fields.imagen as any).fields.file.url}` 
-        : null,
-      items: (cat.fields.productos as any[] || []).map((prod) => ({
-        name: prod.fields.nombre as string,
-        price: prod.fields.precio as string,
-        description: prod.fields.description as string,
-      })),
-    }));
+    return response.items.map((item) => {
+      const fields = item.fields as Record<string, unknown>;
+      const imagen = fields.imagen as ContentfulAsset | undefined;
+      const productos = fields.productos as Array<{ fields: Record<string, unknown> }> | undefined;
+
+      return {
+        category: fields.titulo as string,
+        tituloSeccion: fields.tituloSeccion as string | undefined,
+        subtituloSeccion: fields.subtituloSeccion as string | undefined,
+        image: imagen?.fields?.file?.url 
+          ? `https:${imagen.fields.file.url}` 
+          : null,
+        items: (productos || []).map((prod) => ({
+          name: prod.fields.nombre as string,
+          price: prod.fields.precio as string,
+          description: prod.fields.descripcion as string,
+        })),
+      };
+    });
   } catch (error) {
     console.error("Error cargando el menú de Al Toque:", error);
     return [];
@@ -132,17 +140,18 @@ export const getGalleryData = async () => {
 
     if (response.items.length > 0) {
       const item = response.items[0];
+      const fields = item.fields as Record<string, unknown>;
       
-      const titulo = item.fields.tituloGaleria as string;
-      const subtitulo = item.fields.subtituloGaleria as string;
-      const assets = item.fields.imagenes as any[]; 
+      const titulo = fields.tituloGaleria as string | undefined;
+      const subtitulo = fields.subtituloGaleria as string | undefined;
+      const assets = fields.imagenes as ContentfulAsset[] | undefined; 
       
       return {
-        titulo: titulo , 
+        titulo: titulo, 
         subtitulo: subtitulo,
         imagenes: assets ? assets.map(asset => ({
           url: `https:${asset.fields.file.url}`,
-          title: asset.fields.title as string
+          title: asset.fields.title
         })) : []
       };
     }
@@ -159,7 +168,7 @@ export const getInstagramData = async () => {
     });
 
     if (response.items.length > 0) {
-      const fields = response.items[0].fields;
+      const fields = response.items[0].fields as Record<string, unknown>;
       return {
         usuario: fields.usuario as string,
         descripcion: fields.descripcion as string,
