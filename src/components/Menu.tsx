@@ -1,8 +1,9 @@
 "use client";
 
+import { MenuCategory } from "@/lib/contentful";
 import Image from "next/image";
 
-export const CAFE_MENU = [
+export const CAFE_MENU: MenuCategory[] = [
   {
     category: "Cafés y Bebidas Calientes",
     items: [
@@ -40,33 +41,60 @@ export const CAFE_MENU = [
     items: [
       { name: "Leches Especiales", price: "+0.20€", description: "Avena, Soja o Almendra." },
       { name: "Zumo de Naranja Natural", price: "2.50€", description: "Recién exprimido." },
+      { name: "Iced Latte", price: "3.00€", description: "Nuestro café con leche servido con mucho hielo." },
+      { name: "Leches Especiales", price: "+0.20€", description: "Avena, Soja o Almendra." },
+      { name: "Zumo de Naranja Natural", price: "2.50€", description: "Recién exprimido." },
       { name: "Iced Latte", price: "3.00€", description: "Nuestro café con leche servido con mucho hielo." }
     ]
   }
 ];
 
-export default function Menu() {
+export default function Menu({ data }: { data?: MenuCategory[] }) {
+  const finalMenu = [...(data || [])];
+
+  const staticCategoriesFiltered = CAFE_MENU.filter(staticCat => {
+    const isPresentInContentful = data?.some(d => {
+      const contentfulName = d.category.toLowerCase();
+      const staticName = staticCat.category.toLowerCase();
+      
+      return contentfulName === staticName || 
+             (contentfulName.includes("café") && staticName.includes("café"));
+    });
+    
+    return !isPresentInContentful;
+  });
+
+  const mergedMenu = [...finalMenu, ...staticCategoriesFiltered];
+
   return (
     <section id="menu" className="py-24 bg-surface">
-      <div className="max-w-7xl mx-auto px-6 mb-16 relative z-10">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="font-display text-4xl md:text-5xl font-semibold text-on-surface mb-4">
-            Nuestra Carta
-          </h2>
-          <p className="font-body text-lg text-secondary">
-            Todo claro, rápido y al alcance. Productos de cercanía preparados con todo el cariño de Al Toque.
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 flex flex-col gap-20">
-        {CAFE_MENU.map((categoryData, catIdx) => {
+      <div className="max-w-7xl mx-auto px-6 flex flex-col gap-24">
+        {mergedMenu.map((categoryData, catIdx) => {
           const isEven = catIdx % 2 === 0;
+          const hasSectionHeader = categoryData.tituloSeccion || categoryData.subtituloSeccion;
+          const showDefaultHeader = catIdx === 0 && !hasSectionHeader;
 
           return (
-            <div key={catIdx} className={`flex flex-col ${categoryData.image ? (isEven ? 'lg:flex-row' : 'lg:flex-row-reverse') : ''} gap-10 items-start`}>
+            <div key={catIdx} className="flex flex-col">
+              {(hasSectionHeader || showDefaultHeader) && (
+                <div className="mb-16 relative z-10">
+                  <div className="text-center max-w-2xl mx-auto">
+                    <h2 className="font-display text-4xl md:text-5xl font-semibold text-on-surface mb-4">
+                      {hasSectionHeader ? categoryData.tituloSeccion : "Nuestra Carta"}
+                    </h2>
+                    {(categoryData.subtituloSeccion || showDefaultHeader) && (
+                      <p className="font-body text-lg text-secondary">
+                        {hasSectionHeader 
+                          ? categoryData.subtituloSeccion 
+                          : "Todo claro, rápido y al alcance. Productos de cercanía preparados con todo el cariño de Al Toque."}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className={`flex flex-col ${categoryData.image ? (isEven ? 'lg:flex-row' : 'lg:flex-row-reverse') : ''} gap-10 items-start`}>
               
-              {/* Bloque Izquierdo/Derecho: Imagen (Si la categoría la tiene) */}
               {categoryData.image && (
                 <div className="w-full lg:w-1/2 relative aspect-[4/3] lg:aspect-square rounded-[3rem] overflow-hidden shadow-organic flex-shrink-0 group">
                   <Image 
@@ -75,16 +103,13 @@ export default function Menu() {
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  {/* Etiqueta visual sutil sobre la foto */}
                   <div className="absolute top-6 left-6 bg-white/90 backdrop-blur text-primary px-6 py-2 rounded-full font-display font-medium text-lg leading-none shadow-sm">
                     {categoryData.category}
                   </div>
                 </div>
               )}
 
-              {/* Bloque Principal: Platos y Precios */}
               <div className={`w-full ${categoryData.image ? 'lg:w-1/2' : 'max-w-4xl mx-auto'}`}>
-                 {/* Si no hay imagen, titulo encima de la lista */}
                  {!categoryData.image && (
                     <h3 className="font-display text-3xl text-primary font-medium mb-8 pb-4 border-b-2 border-primary/20">
                        {categoryData.category}
@@ -115,8 +140,9 @@ export default function Menu() {
               </div>
 
             </div>
-          );
-        })}
+          </div>
+        );
+      })}
       </div>
     </section>
   );

@@ -2,7 +2,20 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+export interface GalleryData {
+  titulo?: string;
+  subtitulo?: string;
+  imagenes: { url: string; title?: string }[];
+}
+
+export interface InstagramData {
+  usuario: string;
+  descripcion: string;
+  enlace: string;
+  textoBoton: string;
+}
 
 const photos = [
   "/images/unnamed.webp",
@@ -13,46 +26,72 @@ const photos = [
   "/images/unnamed (6).jpg"
 ];
 
-export default function Gallery() {
+export default function Gallery({ data, instagramData }: { data?: GalleryData, instagramData?: InstagramData }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  if (typeof window !== 'undefined') {
+  const displayPhotos = data && data.imagenes && data.imagenes.length > 0 
+    ? data.imagenes.map(img => img.url) 
+    : photos;
+
+  const igUser = instagramData?.usuario || "@altoque_ferrol";
+  const igDesc = instagramData?.descripcion || "Únete a nuestra comunidad. Descubre los últimos Reels, novedades del menú y el día a día detrás de nuestra barra.";
+  const igLink = instagramData?.enlace || "https://www.instagram.com/altoque_ferrol/";
+  const igButton = instagramData?.textoBoton || "Seguir en Instagram";
+
+  useEffect(() => {
     if (selectedIndex !== null) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
-  }
+  }, [selectedIndex]);
+
 
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedIndex !== null) {
-      setSelectedIndex(selectedIndex === 0 ? photos.length - 1 : selectedIndex - 1);
+      setSelectedIndex(selectedIndex === 0 ? displayPhotos.length - 1 : selectedIndex - 1);
     }
   };
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedIndex !== null) {
-      setSelectedIndex(selectedIndex === photos.length - 1 ? 0 : selectedIndex + 1);
+      setSelectedIndex(selectedIndex === displayPhotos.length - 1 ? 0 : selectedIndex + 1);
     }
   };
 
   return (
     <section className="py-24 bg-surface-container-low">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-12 text-center">
-          <h2 className="font-display text-4xl md:text-5xl font-semibold text-on-surface mb-4">
-            Nuestro Local
-          </h2>
-          <p className="font-body text-lg text-secondary">
-            Un espacio creado para que te sientas como en casa.
-          </p>
-        </div>
+        {(data?.titulo || data?.subtitulo) && (
+          <div className="mb-12 text-center">
+            {data?.titulo && (
+              <h2 className="font-display text-4xl md:text-5xl font-semibold text-on-surface mb-4">
+                {data.titulo}
+              </h2>
+            )}
+            {data?.subtitulo && (
+              <p className="font-body text-lg text-secondary">
+                {data.subtitulo}
+              </p>
+            )}
+          </div>
+        )}
+        {!data?.titulo && !data?.subtitulo && (
+          <div className="mb-12 text-center">
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-on-surface mb-4">
+              Nuestro Local
+            </h2>
+            <p className="font-body text-lg text-secondary">
+              Un espacio creado para que te sientas como en casa.
+            </p>
+          </div>
+        )}
         
         {/* Grid de Galería Modal */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
-          {photos.map((src, idx) => (
+          {displayPhotos.map((src, idx) => (
             <div 
               key={idx} 
               onClick={() => setSelectedIndex(idx)}
@@ -79,16 +118,14 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* Sección de Instagram Call To Action (Reemplazando el video roto) */}
         <div className="mt-24 max-w-lg mx-auto">
           <a 
-            href="https://www.instagram.com/altoque_ferrol/" 
+            href={igLink} 
             target="_blank" 
             rel="noopener noreferrer"
             className="block group"
           >
             <div className="bg-surface-container-lowest rounded-[2.5rem] p-8 md:p-10 shadow-organic border border-outline-variant/20 flex flex-col items-center text-center transition-transform hover:-translate-y-2 duration-300 relative overflow-hidden">
-              {/* Decoración de fondo */}
               <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-primary-fixed to-primary-container rounded-full blur-3xl opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity" />
               
               <div className="w-20 h-20 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full p-1 mb-6 shadow-sm">
@@ -97,13 +134,13 @@ export default function Gallery() {
                 </div>
               </div>
               
-              <h3 className="font-display text-2xl font-bold text-on-surface mb-2">@altoque_ferrol</h3>
+              <h3 className="font-display text-2xl font-bold text-on-surface mb-2">{igUser}</h3>
               <p className="font-body text-on-surface-variant mb-8 px-4">
-                Únete a nuestra comunidad. Descubre los últimos Reels, novedades del menú y el día a día detrás de nuestra barra.
+                {igDesc}
               </p>
               
               <div className="bg-primary text-on-primary font-medium px-8 py-3 rounded-full flex items-center gap-2 group-hover:bg-primary-container group-hover:text-primary transition-colors">
-                 <span>Seguir en Instagram</span>
+                 <span>{igButton}</span>
               </div>
             </div>
           </a>
@@ -111,7 +148,6 @@ export default function Gallery() {
 
       </div>
 
-      {/* Lightbox / Modal con controles */}
       <AnimatePresence>
         {selectedIndex !== null && (
            <motion.div 
@@ -158,7 +194,7 @@ export default function Gallery() {
                 onClick={(e) => e.stopPropagation()} 
               >
                 <Image 
-                  src={photos[selectedIndex]}
+                  src={displayPhotos[selectedIndex]}
                   alt={`Imagen ampliada ${selectedIndex + 1}`}
                   fill
                   className="object-contain"
