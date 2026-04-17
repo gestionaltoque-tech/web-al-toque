@@ -93,7 +93,7 @@ export default function Menu({ data }: { data?: MenuCategory[] }) {
                 </div>
               )}
 
-              <div className={`flex flex-col ${categoryData.image ? (isEven ? 'lg:flex-row' : 'lg:flex-row-reverse') : ''} gap-10 items-start`}>
+              <div className={`flex flex-col ${categoryData.image ? (isEven ? 'lg:flex-row' : 'lg:flex-row-reverse') : ''} gap-10 lg:items-center items-start`}>
               
               {categoryData.image && (
                 <div className="w-full lg:w-1/2 relative aspect-[4/3] lg:aspect-square rounded-[3rem] overflow-hidden shadow-organic flex-shrink-0 group">
@@ -123,7 +123,7 @@ export default function Menu({ data }: { data?: MenuCategory[] }) {
                         className="group flex flex-col p-5 rounded-[1.5rem] bg-surface-container-lowest transition-all duration-300 hover:bg-surface-container-low hover:shadow-sm border border-outline-variant/10 relative overflow-hidden"
                       >
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300" />
-                        <div className="flex justify-between items-baseline mb-2 gap-4">
+                        <div className="flex justify-between items-center mb-2 gap-4">
                           <h4 className="font-body text-xl font-semibold text-on-surface leading-tight">
                             {item.name}
                           </h4>

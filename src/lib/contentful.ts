@@ -260,3 +260,24 @@ export const getFooterData = async () => {
     return null;
   }
 };
+
+export const getNavbarData = async () => {
+  try {
+    const response = await contentfulClient.getEntries({
+      content_type: 'navbar',
+      limit: 1,
+    });
+
+    if (response.items.length > 0) {
+      const fields = response.items[0].fields as any;
+      return {
+        titulo: fields.tituloSitio,
+        logoUrl: fields.logo?.fields?.file?.url ? `https:${fields.logo.fields.file.url}` : null,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Error cargando el Navbar:", error);
+    return null;
+  }
+};
