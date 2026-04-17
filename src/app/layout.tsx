@@ -15,7 +15,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Al Toque | Tu parada rápida y sabrosa en Ferrol",
+  metadataBase: new URL('https://al-toque-dun.vercel.app/'), // Temporal hasta tener el dominio
+  title: {
+    default: "Al Toque | Cafetería en Ferrol",
+    template: "%s | Al Toque"
+  },
   description: "Tu parada rápida y sabrosa en el corazón de Ferrol. Cafetería Pet Friendly.",
 };
 

@@ -9,6 +9,42 @@ import InfoSection from "@/components/InfoSection";
 import Menu from "@/components/Menu";
 import Reviews from "@/components/Reviews";
 import { getActionButtonsData, getFooterData, getGalleryData, getHeroData, getInfoSectionData, getInstagramData, getMenuData, getNavbarData, getReviewsData } from "@/lib/contentful";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [navbarData, footerData] = await Promise.all([
+    getNavbarData(),
+    getFooterData()
+  ]);
+  
+  const title = navbarData?.titulo || "Al Toque";
+  const description = footerData?.texto || "Tu parada rápida y sabrosa en el corazón de Ferrol. Cafetería Pet Friendly.";
+  const logo = navbarData?.logoUrl || "https://al-toque-dun.vercel.app/images/LOGO.png";
+
+  return {
+    title: `${title} | Cafetería en Ferrol`,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      images: [
+        {
+          url: logo,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: title,
+      description: description,
+      images: [logo],
+    },
+  };
+}
 
 export default async function Home() {
   const [heroData, infoData, menuData, galleryData, instagramData, reviewsData, actionButtonsData, footerData, navbarData] = await Promise.all([
