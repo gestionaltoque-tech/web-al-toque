@@ -8,22 +8,23 @@ import Hero from "@/components/Hero";
 import InfoSection from "@/components/InfoSection";
 import Menu from "@/components/Menu";
 import Reviews from "@/components/Reviews";
-import { getGalleryData, getHeroData, getInfoSectionData, getInstagramData, getMenuData, getReviewsData } from "@/lib/contentful";
+import { getActionButtonsData, getFooterData, getGalleryData, getHeroData, getInfoSectionData, getInstagramData, getMenuData, getReviewsData } from "@/lib/contentful";
 
 export default async function Home() {
-  const [heroData, infoData, menuData, galleryData, instagramData, reviewsData] = await Promise.all([
+  const [heroData, infoData, menuData, galleryData, instagramData, reviewsData, actionButtonsData, footerData] = await Promise.all([
     getHeroData(),
     getInfoSectionData(),
     getMenuData(),
     getGalleryData(),
     getInstagramData(),
-    getReviewsData()
+    getReviewsData(),
+    getActionButtonsData(),
+    getFooterData()
   ]);
   
  /*  console.log(menuData,"MENU DATA");
   console.log(galleryData,"galleryData");
   console.log(reviewsData,"reviewsData"); */
-  
   return (
     <main className="min-h-screen bg-surface">
       <Header />
@@ -32,8 +33,8 @@ export default async function Home() {
       <Menu data={menuData || undefined}/>
       <Gallery data={galleryData || undefined} instagramData={instagramData || undefined}/>
       <Reviews data={reviewsData} />
-      <ActionButtons />
-      <Footer />
+      <ActionButtons data={actionButtonsData || undefined} />
+      <Footer data={footerData || undefined} />
     </main>
   );
 }

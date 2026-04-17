@@ -210,3 +210,53 @@ export const getReviewsData = async (): Promise<ReviewData[]> => {
     return [];
   }
 };
+
+export const getActionButtonsData = async () => {
+  const response = await contentfulClient.getEntries({
+    content_type: 'ActionButtonsSection', 
+  });
+
+  if (response.items.length > 0) {
+    const fields = response.items[0].fields as any;
+    return {
+      titulo: fields.titulo,
+      whatsapp: {
+        texto: fields.textoWhatsapp,
+        enlace: fields.enlaceWhatsApp,
+      },
+      mapas: {
+        texto: fields.textoMapas,
+        enlace: fields.enlaceMapas,
+      },
+      llamada: {
+        texto: fields.textoLlamada,
+        telefono: fields.telefonoLlamada,
+      }
+    };
+  }
+  return null;
+};
+
+export const getFooterData = async () => {
+  try {
+    const response = await contentfulClient.getEntries({
+      content_type: 'footer',
+      limit: 1,
+    });
+
+    if (response.items.length > 0) {
+      const fields = response.items[0].fields as any;
+      return {
+        titulo: fields.tituloFooter,
+        texto: fields.textoFooter,
+        follow: fields.follow,
+        instagramLink: fields.enlaceInstagram,
+        direccion: fields.direccion,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Error cargando Footer:", error);
+    return null;
+  }
+};
