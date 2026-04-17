@@ -1,4 +1,4 @@
-export const revalidate = 86400;
+export const revalidate = 60;
 
 import ActionButtons from "@/components/ActionButtons";
 import Footer from "@/components/Footer";
