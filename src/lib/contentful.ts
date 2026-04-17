@@ -199,12 +199,15 @@ export const getReviewsData = async (): Promise<ReviewData[]> => {
 
     return response.items
       .filter(item => item.fields.texto && item.fields.link)
-      .map((item: any) => ({
-        name: item.fields.name as string | undefined,
-        text: item.fields.texto as string,
-        originalDate: item.fields.originalDate as string | undefined,
-        link: item.fields.link as string,
-      }));
+      .map((item) => {
+        const fields = item.fields as Record<string, unknown>;
+        return {
+          name: fields.name as string | undefined,
+          text: fields.texto as string,
+          originalDate: fields.originalDate as string | undefined,
+          link: fields.link as string,
+        };
+      });
   } catch (error) {
     console.error("Error al obtener las reseñas:", error);
     return [];
@@ -212,29 +215,34 @@ export const getReviewsData = async (): Promise<ReviewData[]> => {
 };
 
 export const getActionButtonsData = async () => {
-  const response = await contentfulClient.getEntries({
-    content_type: 'ActionButtonsSection', 
-  });
+  try {
+    const response = await contentfulClient.getEntries({
+      content_type: 'ActionButtonsSection', 
+    });
 
-  if (response.items.length > 0) {
-    const fields = response.items[0].fields as any;
-    return {
-      titulo: fields.titulo,
-      whatsapp: {
-        texto: fields.textoWhatsapp,
-        enlace: fields.enlaceWhatsApp,
-      },
-      mapas: {
-        texto: fields.textoMapas,
-        enlace: fields.enlaceMapas,
-      },
-      llamada: {
-        texto: fields.textoLlamada,
-        telefono: fields.telefonoLlamada,
-      }
-    };
+    if (response.items.length > 0) {
+      const fields = response.items[0].fields as Record<string, unknown>;
+      return {
+        titulo: fields.titulo as string | undefined,
+        whatsapp: {
+          texto: fields.textoWhatsapp as string | undefined,
+          enlace: fields.enlaceWhatsApp as string | undefined,
+        },
+        mapas: {
+          texto: fields.textoMapas as string | undefined,
+          enlace: fields.enlaceMapas as string | undefined,
+        },
+        llamada: {
+          texto: fields.textoLlamada as string | undefined,
+          telefono: fields.telefonoLlamada as string | undefined,
+        }
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Error al obtener ActionButtons:", error);
+    return null;
   }
-  return null;
 };
 
 export const getFooterData = async () => {
@@ -245,13 +253,13 @@ export const getFooterData = async () => {
     });
 
     if (response.items.length > 0) {
-      const fields = response.items[0].fields as any;
+      const fields = response.items[0].fields as Record<string, unknown>;
       return {
-        titulo: fields.tituloFooter,
-        texto: fields.textoFooter,
-        follow: fields.follow,
-        instagramLink: fields.enlaceInstagram,
-        direccion: fields.direccion,
+        titulo: fields.tituloFooter as string,
+        texto: fields.textoFooter as string | undefined,
+        follow: fields.follow as string | undefined,
+        instagramLink: fields.enlaceInstagram as string | undefined,
+        direccion: fields.direccion as string | undefined,
       };
     }
     return null;
@@ -269,10 +277,11 @@ export const getNavbarData = async () => {
     });
 
     if (response.items.length > 0) {
-      const fields = response.items[0].fields as any;
+      const fields = response.items[0].fields as Record<string, unknown>;
+      const logo = fields.logo as ContentfulAsset | undefined;
       return {
-        titulo: fields.tituloSitio,
-        logoUrl: fields.logo?.fields?.file?.url ? `https:${fields.logo.fields.file.url}` : null,
+        titulo: fields.tituloSitio as string | undefined,
+        logoUrl: logo?.fields?.file?.url ? `https:${logo.fields.file.url}` : null,
       };
     }
     return null;
