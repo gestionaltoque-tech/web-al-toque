@@ -50,6 +50,13 @@ export interface MenuCategory {
   subtituloSeccion?: string;
 }
 
+export interface ReviewData {
+  name?: string;
+  text: string;
+  originalDate?: string;
+  link: string;
+}
+
 
 export const getHeroData = async () => {
   try {
@@ -180,5 +187,26 @@ export const getInstagramData = async () => {
   } catch (error) {
     console.error("Error cargando Instagram:", error);
     return null;
+  }
+};
+
+export const getReviewsData = async (): Promise<ReviewData[]> => {
+  try {
+    const response = await contentfulClient.getEntries({
+      content_type: 'review',
+      order: ['-sys.createdAt'],
+    });
+
+    return response.items
+      .filter(item => item.fields.texto && item.fields.link)
+      .map((item: any) => ({
+        name: item.fields.name as string | undefined,
+        text: item.fields.texto as string,
+        originalDate: item.fields.originalDate as string | undefined,
+        link: item.fields.link as string,
+      }));
+  } catch (error) {
+    console.error("Error al obtener las reseñas:", error);
+    return [];
   }
 };

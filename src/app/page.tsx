@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const revalidate = 43200;
 
 import ActionButtons from "@/components/ActionButtons";
 import Footer from "@/components/Footer";
@@ -8,19 +8,21 @@ import Hero from "@/components/Hero";
 import InfoSection from "@/components/InfoSection";
 import Menu from "@/components/Menu";
 import Reviews from "@/components/Reviews";
-import { getGalleryData, getHeroData, getInfoSectionData, getInstagramData, getMenuData } from "@/lib/contentful";
+import { getGalleryData, getHeroData, getInfoSectionData, getInstagramData, getMenuData, getReviewsData } from "@/lib/contentful";
 
 export default async function Home() {
-  const [heroData, infoData, menuData, galleryData, instagramData] = await Promise.all([
+  const [heroData, infoData, menuData, galleryData, instagramData, reviewsData] = await Promise.all([
     getHeroData(),
     getInfoSectionData(),
     getMenuData(),
     getGalleryData(),
-    getInstagramData()
+    getInstagramData(),
+    getReviewsData()
   ]);
   
-  /* console.log(menuData,"MENU DATA");
-  console.log(galleryData,"galleryData"); */
+ /*  console.log(menuData,"MENU DATA");
+  console.log(galleryData,"galleryData");
+  console.log(reviewsData,"reviewsData"); */
   
   return (
     <main className="min-h-screen bg-surface">
@@ -29,7 +31,7 @@ export default async function Home() {
       <InfoSection data={infoData || undefined} />
       <Menu data={menuData || undefined}/>
       <Gallery data={galleryData || undefined} instagramData={instagramData || undefined}/>
-      <Reviews />
+      <Reviews data={reviewsData} />
       <ActionButtons />
       <Footer />
     </main>

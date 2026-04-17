@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ReviewData } from "@/lib/contentful";
 
-const REVIEWS = [
+const REVIEWS_FALLBACK: ReviewData[] = [
   {
     name: "Isabel Quintairos Blanco",
     text: "Estupendo local para tomar café, desayunar o merendar. Opciones sin lactosa y sin gluten, deliciosas y frescas, incluido pan del día. Las palmeras de chocolate son espectaculares (y grandes, pongo en la foto al lado de un paquete de pañuelos). El personal, encantador, y el servicio, magnífico. Además los precios son muy razonables. Es nuestra cafetería en Ferrol. Maravillosa.",
@@ -23,7 +24,8 @@ const REVIEWS = [
   }
 ];
 
-function getRelativeTime(dateString: string) {
+function getRelativeTime(dateString?: string) {
+  if (!dateString) return "Hace poco";
   const date = new Date(dateString);
   const now = new Date();
   
@@ -41,7 +43,13 @@ function getRelativeTime(dateString: string) {
   return months === 1 ? 'Hace 1 mes' : `Hace ${months} meses`;
 }
 
-export default function Reviews() {
+interface ReviewsProps {
+  data?: ReviewData[];
+}
+
+export default function Reviews({ data }: ReviewsProps) {
+  const reviewsToDisplay = data && data.length > 0 ? data : REVIEWS_FALLBACK;
+
   return (
     <section className="py-24 bg-surface-dark overflow-hidden transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-6">
@@ -55,7 +63,7 @@ export default function Reviews() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {REVIEWS.map((review, idx) => (
+          {reviewsToDisplay.map((review, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 20 }}
@@ -81,11 +89,11 @@ export default function Reviews() {
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white">
-                      {review.name.charAt(0)}
+                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white uppercase">
+                      {(review.name || "Cliente").charAt(0)}
                     </div>
                     <div>
-                      <h4 className="font-body font-semibold text-on-surface-dark leading-tight">{review.name}</h4>
+                      <h4 className="font-body font-semibold text-on-surface-dark leading-tight">{review.name || "Cliente"}</h4>
                       <span className="text-xs text-on-surface-dark/50">{getRelativeTime(review.originalDate)}</span>
                     </div>
                   </div>
