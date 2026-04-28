@@ -1,6 +1,6 @@
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Noto_Serif, Plus_Jakarta_Sans } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const notoSerif = Noto_Serif({
@@ -16,12 +16,16 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://al-toque-dun.vercel.app/'), // Temporal hasta tener el dominio
+  metadataBase: new URL('https://cafeteriaaltoque.es/'),
   title: {
     default: "Al Toque | Cafetería en Ferrol",
     template: "%s | Al Toque"
   },
   description: "Tu parada rápida y sabrosa en el corazón de Ferrol. Cafetería Pet Friendly.",
+  icons: {
+    icon: '/images/LOGO.png',
+    apple: '/images/LOGO.png',
+  },
 };
 
 export default function RootLayout({
