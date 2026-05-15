@@ -3,73 +3,13 @@
 import { MenuCategory } from "@/lib/contentful";
 import Image from "next/image";
 
-export const CAFE_MENU: MenuCategory[] = [
-  {
-    category: "Cafés y Bebidas Calientes",
-    items: [
-      { name: "Espresso / Ristretto", price: "1.40€", description: "Café de especialidad recién molido." },
-      { name: "Café Cortado", price: "1.50€", description: "Con un toque de leche cremosa." },
-      { name: "Café con Leche", price: "1.70€", description: "Equilibrio perfecto entre café y leche." },
-      { name: "Capuccino", price: "2.50€", description: "Espuma densa con cacao o canela espolvoreada." },
-      { name: "Latte Macchiato", price: "2.80€", description: "Tres capas de placer: leche, espresso y espuma." },
-      { name: "Mocha", price: "3.20€", description: "Café, leche y un toque de chocolate artesano." },
-      { name: "Infusiones Orgánicas", price: "1.80€", description: "Té verde, rojo, negro y mezclas herbales." },
-      { name: "Chocolate a la Taza", price: "2.50€", description: "Espeso y reconfortante." }
-    ]
-  },
-  {
-    category: "Desayunos y Tostas",
-    image: "/images/unnamed (3).jpg",
-    items: [
-      { name: "Tostada con Tomate y AOVE", price: "2.20€", description: "Pan artesano, tomate triturado y aceite virgen extra." },
-      { name: "Tostada Al Toque", price: "4.50€", description: "Aguacate, huevo poché y semillas sobre pan de masa madre." },
-      { name: "Bowl de Yogur y Granola", price: "3.90€", description: "Yogur natural, frutas de temporada y granola crujiente." },
-      { name: "Croissant a la Plancha", price: "1.80€", description: "Mantequilla y mermelada o solo." }
-    ]
-  },
-  {
-    category: "Bollería Artesana",
-    image: "/images/bolleria_artesana.webp",
-    items: [
-      { name: "Cookie de Chocolate", price: "2.00€", description: "Horneada diariamente con pepitas de chocolate negro." },
-      { name: "Bizcocho Casero", price: "2.50€", description: "Pregunta por el sabor del día (Limón, Naranja, Marmolado)." },
-      { name: "Palmera de Chocolate", price: "1.90€", description: "Hojaldre crujiente bañado en chocolate." }
-    ]
-  },
-  {
-    category: "Extras y Bebidas Frías",
-    items: [
-      { name: "Leches Especiales", price: "+0.20€", description: "Avena, Soja o Almendra." },
-      { name: "Zumo de Naranja Natural", price: "2.50€", description: "Recién exprimido." },
-      { name: "Iced Latte", price: "3.00€", description: "Nuestro café con leche servido con mucho hielo." },
-      { name: "Leches Especiales", price: "+0.20€", description: "Avena, Soja o Almendra." },
-      { name: "Zumo de Naranja Natural", price: "2.50€", description: "Recién exprimido." },
-      { name: "Iced Latte", price: "3.00€", description: "Nuestro café con leche servido con mucho hielo." }
-    ]
-  }
-];
-
 export default function Menu({ data }: { data?: MenuCategory[] }) {
-  const finalMenu = [...(data || [])];
-
-  const staticCategoriesFiltered = CAFE_MENU.filter(staticCat => {
-    const isPresentInContentful = data?.some(d => {
-      const contentfulName = d.category.toLowerCase();
-      const staticName = staticCat.category.toLowerCase();
-      
-      return contentfulName === staticName || 
-             (contentfulName.includes("café") && staticName.includes("café"));
-    });
-    
-    return !isPresentInContentful;
-  });
-
-  const mergedMenu = [...finalMenu, ...staticCategoriesFiltered];
+  if (!data || data.length === 0) return null;
 
   return (
     <section id="menu" className="py-24 bg-surface">
       <div className="max-w-7xl mx-auto px-6 flex flex-col gap-24">
-        {mergedMenu.map((categoryData, catIdx) => {
+        {data.map((categoryData, catIdx) => {
           const isEven = catIdx % 2 === 0;
           const hasSectionHeader = categoryData.tituloSeccion || categoryData.subtituloSeccion;
           const showDefaultHeader = catIdx === 0 && !hasSectionHeader;
